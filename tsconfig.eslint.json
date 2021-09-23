@@ -1,6 +1,6 @@
 {
   "extends": "@foxglove/tsconfig/base",
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./bench/**/*"],
   "compilerOptions": {
     "lib": ["dom"]
   }
