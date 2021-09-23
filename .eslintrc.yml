@@ -3,14 +3,22 @@ extends:
   - plugin:@foxglove/jest
 
 env:
+  browser: true
+  es6: true
   node: true
 
 ignorePatterns:
   - dist
+
+rules:
+  no-restricted-syntax:
+    - error
+    - selector: 'BinaryExpression[operator=">>"]'
+      message: When working with unsigned numbers, use the unsigned right shift operator `>>>`.
 
 overrides:
   - files: ["*.ts", "*.tsx"]
     extends:
       - plugin:@foxglove/typescript
     parserOptions:
-      project: tsconfig.json
+      project: tsconfig.eslint.json

@@ -2,8 +2,6 @@
   "extends": "@foxglove/tsconfig/base",
   "include": ["./src/**/*"],
   "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "./dist/esm",
     "lib": ["dom"]
   }
 }

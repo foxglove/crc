@@ -1,12 +1,12 @@
 {
-  "name": "@foxglove/template-typescript",
-  "private": true,
+  "name": "@foxglove/crc",
+  "private": false,
   "version": "0.0.1",
-  "description": "",
-  "license": "",
+  "description": "Fast CRC32 computation in TypeScript",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/foxglove/template.git"
+    "url": "https://github.com/foxglove/crc.git"
   },
   "author": {
     "name": "Foxglove",
