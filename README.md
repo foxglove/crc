@@ -44,8 +44,6 @@ while (/* more data available */) {
 crc = crc32Final(crc);
 ```
 
-## Alternatives
-
 ## References
 
 For further information about CRCs and their computation, see:
