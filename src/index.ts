@@ -17,7 +17,13 @@
  * significant bit represents x^0).
  * @param numTables The number of bytes of input that will be processed at once.
  */
-function crc32GenerateTables({ polynomial, numTables }: { polynomial: number; numTables: number }) {
+export function crc32GenerateTables({
+  polynomial,
+  numTables,
+}: {
+  polynomial: number;
+  numTables: number;
+}): Uint32Array {
   const table = new Uint32Array(256 * numTables);
   for (let i = 0; i < 256; i++) {
     let r = i;
@@ -38,7 +44,7 @@ function crc32GenerateTables({ polynomial, numTables }: { polynomial: number; nu
   return table;
 }
 
-const CRC32_TABLE = crc32GenerateTables({ polynomial: 0xedb88320, numTables: 1 });
+const CRC32_TABLE = crc32GenerateTables({ polynomial: 0xedb88320, numTables: 8 });
 
 /**
  * Initialize a CRC32 to all 1 bits.
@@ -49,13 +55,49 @@ export function crc32Init(): number {
 
 /**
  * Update a streaming CRC32 calculation.
+ *
+ * For performance, this implementation processes the data 8 bytes at a time, using the algorithm
+ * presented at: https://github.com/komrad36/CRC#option-9-8-byte-tabular
  */
-export function crc32Update(prev: number, data: Uint8Array): number {
-  let value = prev;
-  for (let i = 0; i < data.length; i++) {
-    value = CRC32_TABLE[(value ^ data[i]!) & 0xff]! ^ (value >>> 8);
+export function crc32Update(prev: number, data: ArrayBufferView): number {
+  const byteLength = data.byteLength;
+  const view = new DataView(data.buffer, data.byteOffset, byteLength);
+  let r = prev;
+  let offset = 0;
+
+  // Process bytes one by one until we reach 4-byte alignment, which will speed up uint32 access.
+  const toAlign = -view.byteOffset & 3;
+  for (; offset < toAlign && offset < byteLength; offset++) {
+    r = CRC32_TABLE[(r ^ view.getUint8(offset)) & 0xff]! ^ (r >>> 8);
   }
-  return value;
+  if (offset === byteLength) {
+    return r;
+  }
+
+  offset = toAlign;
+
+  // Process 8 bytes (2 uint32s) at a time.
+  let remainingBytes = byteLength - offset;
+  for (; remainingBytes >= 8; offset += 8, remainingBytes -= 8) {
+    r ^= view.getUint32(offset, true);
+    const r2 = view.getUint32(offset + 4, true);
+    r =
+      CRC32_TABLE[0 * 256 + ((r2 >>> 24) & 0xff)]! ^
+      CRC32_TABLE[1 * 256 + ((r2 >>> 16) & 0xff)]! ^
+      CRC32_TABLE[2 * 256 + ((r2 >>> 8) & 0xff)]! ^
+      CRC32_TABLE[3 * 256 + ((r2 >>> 0) & 0xff)]! ^
+      CRC32_TABLE[4 * 256 + ((r >>> 24) & 0xff)]! ^
+      CRC32_TABLE[5 * 256 + ((r >>> 16) & 0xff)]! ^
+      CRC32_TABLE[6 * 256 + ((r >>> 8) & 0xff)]! ^
+      CRC32_TABLE[7 * 256 + ((r >>> 0) & 0xff)]!;
+  }
+
+  // Process any remaining bytes one by one. (Perf note: inexplicably, using a temporary variable
+  // `i` rather than reusing `offset` here is faster in V8.)
+  for (let i = offset; i < byteLength; i++) {
+    r = CRC32_TABLE[(r ^ view.getUint8(i)) & 0xff]! ^ (r >>> 8);
+  }
+  return r;
 }
 
 /**
@@ -69,6 +111,6 @@ export function crc32Final(prev: number): number {
  * Calculate a one-shot CRC32. If the data is being accumulated incrementally, use the functions
  * `crc32Init`, `crc32Update`, and `crc32Final` instead.
  */
-export function crc32(data: Uint8Array): number {
+export function crc32(data: ArrayBufferView): number {
   return crc32Final(crc32Update(crc32Init(), data));
 }

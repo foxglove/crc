@@ -16,10 +16,10 @@ The following functions are exported from this package:
 
 ```ts
 function crc32Init(): number;
-function crc32Update(prev: number, data: Uint8Array): number;
+function crc32Update(prev: number, data: ArrayBufferView): number;
 function crc32Final(prev: number): number;
 
-function crc32(data: Uint8Array): number;
+function crc32(data: ArrayBufferView): number;
 ```
 
 Note: Since the CRC algorithm works with unsigned data, the `crc32` and `crc32Final` functions always return **non-negative** numbers. For example, CRC32(0x01) returns 2768625435 rather than -1526341861.

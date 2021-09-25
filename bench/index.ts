@@ -1,230 +1,216 @@
 import { add, complete, cycle, suite } from "benny";
 import crypto from "crypto";
 
-function generateCrc32TableTernary() {
-  const table32 = new Array<number>(256);
-  const poly32 = 0xedb88320;
+import { crc32GenerateTables, crc32Update } from "../src";
+
+function generateCrc32TableTernary(polynomial: number) {
+  const table = new Uint32Array(256);
   for (let n = 0; n < 256; n++) {
     let c = n;
     for (let k = 0; k < 8; k++) {
-      c = (c & 1) === 0 ? poly32 ^ (c >>> 1) : c >>> 1;
+      c = (c & 1) === 0 ? polynomial ^ (c >>> 1) : c >>> 1;
     }
-    table32[n] = c;
+    table[n] = c;
   }
-  return table32;
+  return table;
 }
 
-function generateCrc32TableBranchless() {
-  const table32 = new Array<number>(256);
-  const poly32 = 0xedb88320;
+// Use multiplication to avoid branching from ternary operator
+function generateCrc32TableBranchless(polynomial: number) {
+  const table = new Uint32Array(256);
   for (let n = 0; n < 256; n++) {
     let c = n;
     for (let k = 0; k < 8; k++) {
-      c = ((c & 1) * poly32) ^ (c >>> 1);
+      c = ((c & 1) * polynomial) ^ (c >>> 1);
     }
-    table32[n] = c;
+    table[n] = c;
   }
+  return table;
 }
 
-function generateCrc32TablesBranchlessUnrolled(numTables: number) {
-  const table32 = new Array<number>(numTables * 256);
-  const poly32 = 0xedb88320;
-  let i = 0;
-  for (; i < 256; i++) {
-    let c = i;
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    table32[i] = c;
+function crcUpdateNaive(prev: number, polynomial: number, data: Uint8Array): number {
+  let r = prev;
+  for (let i = 0; i < data.length; i++) {
+    r ^= data[i]!;
+    r = ((r & 1) * polynomial) ^ (r >>> 1);
+    r = ((r & 1) * polynomial) ^ (r >>> 1);
+    r = ((r & 1) * polynomial) ^ (r >>> 1);
+    r = ((r & 1) * polynomial) ^ (r >>> 1);
+    r = ((r & 1) * polynomial) ^ (r >>> 1);
+    r = ((r & 1) * polynomial) ^ (r >>> 1);
+    r = ((r & 1) * polynomial) ^ (r >>> 1);
+    r = ((r & 1) * polynomial) ^ (r >>> 1);
   }
-  for (; i < numTables * 256; i++) {
-    const r = table32[i - 256]!;
-    table32[i] = (r >>> 8) ^ table32[r & 0xff]!;
-  }
-  return table32;
+  return r;
 }
 
-function crcNaive(data: Uint8Array): number {
-  const poly32 = 0xedb88320;
-  let c = 0xffffffff;
-  for (let n = 0; n < data.length; n++) {
-    c ^= data[n]!;
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-    c = ((c & 1) * poly32) ^ (c >>> 1);
-  }
-  return c ^ 0xffffffff;
-}
+const table = crc32GenerateTables({ polynomial: 0xedb88320, numTables: 16 });
 
-const table32 = generateCrc32TablesBranchlessUnrolled(32);
-
-function crcTable(data: Uint8Array): number {
+function crcUpdate1byte(prev: number, data: Uint8Array): number {
+  let r = prev;
   const length = data.length;
-  let r = 0xffffffff;
-  for (let n = 0; n < length; n++) {
-    r = table32[(r ^ data[n]!) & 0xff]! ^ (r >>> 8);
+  for (let i = 0; i < length; i++) {
+    r = table[(r ^ data[i]!) & 0xff]! ^ (r >>> 8);
   }
-  return r ^ 0xffffffff;
+  return r;
 }
 
-function crcTable2(data: Uint8Array): number {
+function crcUpdate2byte(prev: number, data: Uint8Array): number {
   const array16 = new Uint16Array(data.buffer, data.byteOffset, data.byteLength >>> 1);
   const count = data.length >>> 1;
-  let r = 0xffffffff;
+  let r = prev;
   for (let i = 0; i < count; i++) {
     r ^= array16[i]!;
-    r = (r >>> 16) ^ table32[0 * 256 + ((r >>> 8) & 0xff)]! ^ table32[1 * 256 + (r & 0xff)]!;
+    r = (r >>> 16) ^ table[0 * 256 + ((r >>> 8) & 0xff)]! ^ table[1 * 256 + (r & 0xff)]!;
   }
   if ((data.length & 1) === 1) {
-    r = table32[(r ^ data[data.length - 1]!) & 0xff]! ^ (r >>> 8);
+    r = table[(r ^ data[data.length - 1]!) & 0xff]! ^ (r >>> 8);
   }
-  return r ^ 0xffffffff;
+  return r;
 }
-function crcTable4(data: Uint8Array): number {
+function crcUpdate4byte(prev: number, data: Uint8Array): number {
   const array32 = new Uint32Array(data.buffer, data.byteOffset, data.byteLength >>> 2);
-  const count = data.length >>> 2;
-  let r = 0xffffffff;
-  for (let i = 0; i < count; i++) {
-    r ^= array32[i]!;
+  let r = prev;
+  let remainingBytes = data.byteLength;
+  for (let i = 0; remainingBytes >= 4; remainingBytes -= 4) {
+    r ^= array32[i++]!;
     r =
-      table32[0 * 256 + ((r >>> 24) & 0xff)]! ^
-      table32[1 * 256 + ((r >>> 16) & 0xff)]! ^
-      table32[2 * 256 + ((r >>> 8) & 0xff)]! ^
-      table32[3 * 256 + ((r >>> 0) & 0xff)]!;
+      table[0 * 256 + ((r >>> 24) & 0xff)]! ^
+      table[1 * 256 + ((r >>> 16) & 0xff)]! ^
+      table[2 * 256 + ((r >>> 8) & 0xff)]! ^
+      table[3 * 256 + ((r >>> 0) & 0xff)]!;
   }
-  for (let n = count * 4; n < data.byteLength; n++) {
-    r = table32[(r ^ data[n]!) & 0xff]! ^ (r >>> 8);
+  for (let n = data.byteLength - remainingBytes; n < data.byteLength; n++) {
+    r = table[(r ^ data[n]!) & 0xff]! ^ (r >>> 8);
   }
-  return r ^ 0xffffffff;
+  return r;
 }
-function crcTable8(data: Uint8Array): number {
+function crcUpdate8byte(prev: number, data: Uint8Array): number {
   const array32 = new Uint32Array(data.buffer, data.byteOffset, data.byteLength >>> 2);
-  const count = (array32.length >>> 1) << 1;
-  let r = 0xffffffff;
-  for (let i = 0; i < count; ) {
+  let r = prev;
+  let remainingBytes = data.byteLength;
+  for (let i = 0; remainingBytes >= 8; remainingBytes -= 8) {
     r ^= array32[i++]!;
     const r2 = array32[i++]!;
     r =
-      table32[0 * 256 + ((r2 >>> 24) & 0xff)]! ^
-      table32[1 * 256 + ((r2 >>> 16) & 0xff)]! ^
-      table32[2 * 256 + ((r2 >>> 8) & 0xff)]! ^
-      table32[3 * 256 + ((r2 >>> 0) & 0xff)]! ^
-      table32[4 * 256 + ((r >>> 24) & 0xff)]! ^
-      table32[5 * 256 + ((r >>> 16) & 0xff)]! ^
-      table32[6 * 256 + ((r >>> 8) & 0xff)]! ^
-      table32[7 * 256 + ((r >>> 0) & 0xff)]!;
+      table[0 * 256 + ((r2 >>> 24) & 0xff)]! ^
+      table[1 * 256 + ((r2 >>> 16) & 0xff)]! ^
+      table[2 * 256 + ((r2 >>> 8) & 0xff)]! ^
+      table[3 * 256 + ((r2 >>> 0) & 0xff)]! ^
+      table[4 * 256 + ((r >>> 24) & 0xff)]! ^
+      table[5 * 256 + ((r >>> 16) & 0xff)]! ^
+      table[6 * 256 + ((r >>> 8) & 0xff)]! ^
+      table[7 * 256 + ((r >>> 0) & 0xff)]!;
   }
-  for (let i = count * 4; i < data.byteLength; i++) {
-    r = table32[(r ^ data[i]!) & 0xff]! ^ (r >>> 8);
+  for (let i = data.byteLength - remainingBytes; i < data.byteLength; i++) {
+    r = table[(r ^ data[i]!) & 0xff]! ^ (r >>> 8);
   }
-  return r ^ 0xffffffff;
+  return r;
 }
-function crcTable8DataView(data: Uint8Array): number {
-  const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
-  const count = ((data.byteLength >>> 2) >>> 1) << 3;
-  let r = 0xffffffff;
-  for (let i = 0; i < count; i += 8) {
-    r ^= view.getUint32(i, true);
-    const r2 = view.getUint32(i + 4, true);
-    r =
-      table32[0 * 256 + ((r2 >>> 24) & 0xff)]! ^
-      table32[1 * 256 + ((r2 >>> 16) & 0xff)]! ^
-      table32[2 * 256 + ((r2 >>> 8) & 0xff)]! ^
-      table32[3 * 256 + ((r2 >>> 0) & 0xff)]! ^
-      table32[4 * 256 + ((r >>> 24) & 0xff)]! ^
-      table32[5 * 256 + ((r >>> 16) & 0xff)]! ^
-      table32[6 * 256 + ((r >>> 8) & 0xff)]! ^
-      table32[7 * 256 + ((r >>> 0) & 0xff)]!;
-  }
-  for (let n = count; n < data.byteLength; n++) {
-    r = table32[(r ^ data[n]!) & 0xff]! ^ (r >>> 8);
-  }
-  return r ^ 0xffffffff;
-}
-function crcTable16(data: Uint8Array): number {
+
+function crcUpdate16byte(prev: number, data: Uint8Array): number {
   const array32 = new Uint32Array(data.buffer, data.byteOffset, data.byteLength >>> 2);
-  const count = (array32.length >>> 2) << 2;
-  let r = 0xffffffff;
-  for (let i = 0; i < count; ) {
+  let r = prev;
+  let remainingBytes = data.byteLength;
+  for (let i = 0; remainingBytes >= 16; remainingBytes -= 16) {
     r ^= array32[i++]!;
     const r2 = array32[i++]!;
     const r3 = array32[i++]!;
     const r4 = array32[i++]!;
     r =
-      table32[0 * 256 + ((r4 >>> 24) & 0xff)]! ^
-      table32[1 * 256 + ((r4 >>> 16) & 0xff)]! ^
-      table32[2 * 256 + ((r4 >>> 8) & 0xff)]! ^
-      table32[3 * 256 + ((r4 >>> 0) & 0xff)]! ^
-      table32[4 * 256 + ((r3 >>> 24) & 0xff)]! ^
-      table32[5 * 256 + ((r3 >>> 16) & 0xff)]! ^
-      table32[6 * 256 + ((r3 >>> 8) & 0xff)]! ^
-      table32[7 * 256 + ((r3 >>> 0) & 0xff)]! ^
-      table32[8 * 256 + ((r2 >>> 24) & 0xff)]! ^
-      table32[9 * 256 + ((r2 >>> 16) & 0xff)]! ^
-      table32[10 * 256 + ((r2 >>> 8) & 0xff)]! ^
-      table32[11 * 256 + ((r2 >>> 0) & 0xff)]! ^
-      table32[12 * 256 + ((r >>> 24) & 0xff)]! ^
-      table32[13 * 256 + ((r >>> 16) & 0xff)]! ^
-      table32[14 * 256 + ((r >>> 8) & 0xff)]! ^
-      table32[15 * 256 + ((r >>> 0) & 0xff)]!;
+      table[0 * 256 + ((r4 >>> 24) & 0xff)]! ^
+      table[1 * 256 + ((r4 >>> 16) & 0xff)]! ^
+      table[2 * 256 + ((r4 >>> 8) & 0xff)]! ^
+      table[3 * 256 + ((r4 >>> 0) & 0xff)]! ^
+      table[4 * 256 + ((r3 >>> 24) & 0xff)]! ^
+      table[5 * 256 + ((r3 >>> 16) & 0xff)]! ^
+      table[6 * 256 + ((r3 >>> 8) & 0xff)]! ^
+      table[7 * 256 + ((r3 >>> 0) & 0xff)]! ^
+      table[8 * 256 + ((r2 >>> 24) & 0xff)]! ^
+      table[9 * 256 + ((r2 >>> 16) & 0xff)]! ^
+      table[10 * 256 + ((r2 >>> 8) & 0xff)]! ^
+      table[11 * 256 + ((r2 >>> 0) & 0xff)]! ^
+      table[12 * 256 + ((r >>> 24) & 0xff)]! ^
+      table[13 * 256 + ((r >>> 16) & 0xff)]! ^
+      table[14 * 256 + ((r >>> 8) & 0xff)]! ^
+      table[15 * 256 + ((r >>> 0) & 0xff)]!;
   }
-  for (let n = count * 4; n < data.byteLength; n++) {
-    r = table32[(r ^ data[n]!) & 0xff]! ^ (r >>> 8);
+  for (let i = data.byteLength - remainingBytes; i < data.byteLength; i++) {
+    r = table[(r ^ data[i]!) & 0xff]! ^ (r >>> 8);
   }
-  return r ^ 0xffffffff;
+  return r;
 }
 
 const benchmarkTableGeneration = async () => {
   await suite(
     "Table generation",
-    add("ternary", async () => generateCrc32TableTernary()),
-    add("branchless", async () => generateCrc32TableBranchless()),
-    add("branchless unrolled", async () => generateCrc32TablesBranchlessUnrolled(1)),
+    add("ternary", async () => generateCrc32TableTernary(0xedb88320)),
+    add("branchless", async () => generateCrc32TableBranchless(0xedb88320)),
+    add("branchless unrolled", async () =>
+      crc32GenerateTables({ polynomial: 0xedb88320, numTables: 1 }),
+    ),
     cycle(),
     complete(),
   );
 };
+
+{
+  console.log("Validating CRC implementations:");
+  const data = crypto.randomBytes(1024 * 1024 + 1);
+  const expected = crc32Update(0xffffffff, data) ^ 0xffffffff;
+  const results = {
+    current: expected,
+    naive: crcUpdateNaive(0xffffffff, 0xedb88320, data) ^ 0xffffffff,
+    "1 byte": crcUpdate1byte(0xffffffff, data) ^ 0xffffffff,
+    "2 byte": crcUpdate2byte(0xffffffff, data) ^ 0xffffffff,
+    "4 byte": crcUpdate4byte(0xffffffff, data) ^ 0xffffffff,
+    "8 byte": crcUpdate8byte(0xffffffff, data) ^ 0xffffffff,
+    "16 byte": crcUpdate16byte(0xffffffff, data) ^ 0xffffffff,
+  };
+  console.table([results]);
+  for (const [key, result] of Object.entries(results)) {
+    if (result !== expected) {
+      throw new Error(`${key}: ${result} vs ${expected}`);
+    }
+  }
+  console.log("Results match.");
+}
 
 const benchmarkCrcCalculation = async () => {
   await suite(
     "CRC",
     add("naive", async () => {
       const data = crypto.randomBytes(1024 * 1024);
-      return async () => crcNaive(data);
+      return async () => crcUpdateNaive(0xffffffff, 0xedb88320, data) ^ 0xffffffff;
     }),
-    add("table", async () => {
+    add("1 byte", async () => {
       const data = crypto.randomBytes(1024 * 1024);
-      return async () => crcTable(data);
+      return async () => crcUpdate1byte(0xffffffff, data) ^ 0xffffffff;
     }),
-    add("table 2 bytes at a time", async () => {
+    add("2 bytes", async () => {
       const data = crypto.randomBytes(1024 * 1024);
-      return async () => crcTable2(data);
+      return async () => crcUpdate2byte(0xffffffff, data) ^ 0xffffffff;
     }),
-    add("table 4 bytes at a time", async () => {
+    add("4 bytes", async () => {
       const data = crypto.randomBytes(1024 * 1024);
-      return async () => crcTable4(data);
+      return async () => crcUpdate4byte(0xffffffff, data) ^ 0xffffffff;
     }),
-    add("table 8 bytes at a time", async () => {
+    add("8 bytes", async () => {
       const data = crypto.randomBytes(1024 * 1024);
-      return async () => crcTable8(data);
+      return async () => crcUpdate8byte(0xffffffff, data) ^ 0xffffffff;
     }),
-    add("table 8 bytes at a time with DataView", async () => {
+    add("16 bytes", async () => {
       const data = crypto.randomBytes(1024 * 1024);
-      return async () => crcTable8DataView(data);
+      return async () => crcUpdate16byte(0xffffffff, data) ^ 0xffffffff;
     }),
-    add("table 16 bytes at a time", async () => {
+    add("current implementation", async () => {
       const data = crypto.randomBytes(1024 * 1024);
-      return async () => crcTable16(data);
+      return async () => crc32Update(0xffffffff, data) ^ 0xffffffff;
+    }),
+    add("current implementation, unaligned", async () => {
+      const data = crypto.randomBytes(1024 * 1024);
+      const unalignedData = new Uint8Array(data.buffer, 1, data.byteLength - 1);
+      return async () => crc32Update(0xffffffff, unalignedData) ^ 0xffffffff;
     }),
     cycle(),
     complete(),
