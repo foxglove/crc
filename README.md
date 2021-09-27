@@ -75,6 +75,7 @@ For further information about CRCs and their computation, see:
 
 - https://en.wikipedia.org/wiki/Computation_of_cyclic_redundancy_checks
 - https://github.com/komrad36/CRC
+- https://create.stephan-brumme.com/crc32/
 - https://zlib.net/crc_v3.txt
 - https://github.com/Michaelangel007/crc32
 - https://docs.microsoft.com/en-us/openspecs/office_protocols/ms-abs/06966aa2-70da-4bf9-8448-3355f277cd77
