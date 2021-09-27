@@ -1,7 +1,13 @@
-import { add, complete, cycle, suite } from "benny";
-import crypto from "crypto";
+/// <reference types="./types" />
 
-import { crc32GenerateTables, crc32Update } from "../src";
+import { add, complete, cycle, suite } from "benny";
+import { crc32 as crc_crc32 } from "crc";
+import { buf as crc_32_buf } from "crc-32";
+import crypto from "crypto";
+import { crc32 as node_crc_crc32 } from "node-crc";
+import { crc32 as polycrc_crc32 } from "polycrc";
+
+import { crc32, crc32GenerateTables, crc32Update } from "../src";
 
 function generateCrc32TableTernary(polynomial: number) {
   const table = new Uint32Array(256);
@@ -141,7 +147,7 @@ function crcUpdate16byte(prev: number, data: Uint8Array): number {
   return r;
 }
 
-const benchmarkTableGeneration = async () => {
+async function benchmarkTableGeneration() {
   await suite(
     "Table generation",
     add("ternary", async () => generateCrc32TableTernary(0xedb88320)),
@@ -152,7 +158,7 @@ const benchmarkTableGeneration = async () => {
     cycle(),
     complete(),
   );
-};
+}
 
 {
   console.log("Validating CRC implementations:");
@@ -176,7 +182,7 @@ const benchmarkTableGeneration = async () => {
   console.log("Results match.");
 }
 
-const benchmarkCrcCalculation = async () => {
+async function benchmarkCrcCalculation() {
   await suite(
     "CRC",
     add("naive", async () => {
@@ -215,11 +221,44 @@ const benchmarkCrcCalculation = async () => {
     cycle(),
     complete(),
   );
-};
+}
+
+async function benchmarkAlternatives() {
+  await suite(
+    "Alternative libraries",
+    add("crc", async () => {
+      const data = crypto.randomBytes(1024 * 1024);
+      console.log("crc:", crc_crc32(data), crc32(data));
+      return async () => crc_crc32(data);
+    }),
+    add("node-crc", async () => {
+      const data = crypto.randomBytes(1024 * 1024);
+      console.log("node-crc:", node_crc_crc32(data).readUInt32BE(0), crc32(data));
+      return async () => node_crc_crc32(data).readUInt32BE(0);
+    }),
+    add("crc-32", async () => {
+      const data = crypto.randomBytes(1024 * 1024);
+      console.log("crc-32:", crc_32_buf(data) >>> 0, crc32(data));
+      return async () => crc_32_buf(data);
+    }),
+    add("polycrc", async () => {
+      const data = crypto.randomBytes(1024 * 1024);
+      console.log("polycrc:", polycrc_crc32(data), crc32(data));
+      return async () => polycrc_crc32(data);
+    }),
+    add("this package", async () => {
+      const data = crypto.randomBytes(1024 * 1024);
+      return async () => crc32(data);
+    }),
+    cycle(),
+    complete(),
+  );
+}
 
 async function main() {
   await benchmarkTableGeneration();
   await benchmarkCrcCalculation();
+  await benchmarkAlternatives();
 }
 
 void main();

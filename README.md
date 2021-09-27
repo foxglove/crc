@@ -44,6 +44,31 @@ while (/* more data available */) {
 crc = crc32Final(crc);
 ```
 
+## Benchmarks
+
+This package achieves a >5x performance improvement over many other CRC packages, because of the multi-byte algorithms used (adapted from https://github.com/komrad36/CRC).
+
+The following benchmarks were recorded on a M1 MacBook Air with 16GB of RAM. Each iteration ("op") is processing 1MB of data.
+
+```
+$ yarn bench
+...
+  crc:
+    354.5 ops/s, ±0.48%   | 82.27% slower
+
+  node-crc:
+    315.8 ops/s, ±0.48%   | slowest, 84.21% slower
+
+  crc-32:
+    354.3 ops/s, ±0.39%   | 82.28% slower
+
+  polycrc:
+    316.1 ops/s, ±0.35%   | 84.19% slower
+
+  this package:
+    2 000 ops/s, ±0.41%   | fastest
+```
+
 ## References
 
 For further information about CRCs and their computation, see:
