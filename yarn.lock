@@ -370,10 +370,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@foxglove/eslint-plugin@0.17.1":
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/@foxglove/eslint-plugin/-/eslint-plugin-0.17.1.tgz#f29fbe7bf538f2721535a9c06ec6ec607ad72f71"
-  integrity sha512-/Z32WFj7bBfEIdCh0aXTc5mQbVUcm1KvG586FxCq8k0r0oBUml0bAtLIem9IjE7sUWtabSDJWTFLJpHJhlP+XA==
+"@foxglove/eslint-plugin@0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@foxglove/eslint-plugin/-/eslint-plugin-0.18.0.tgz#b43c491cbde27deb036a484cbf8d116591d17079"
+  integrity sha512-X3aFQp4jlHN1scSS5WalCVhWiLKsKW05a+x7AmEQiMb9b68+yjyU9WGk4XB+se8FZEW3X5SsV+3vxU9mHCAfxg==
 
 "@foxglove/tsconfig@1.1.0":
   version "1.1.0"
