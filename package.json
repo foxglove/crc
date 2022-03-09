@@ -31,9 +31,14 @@
     "lint": "eslint --report-unused-disable-directives --fix .",
     "lint:ci": "eslint --report-unused-disable-directives .",
     "bench": "ts-node --project tsconfig.cjs.json bench/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "asbuild:untouched": "asc assembly/index.ts --target debug",
+    "asbuild:optimized": "asc assembly/index.ts --target release",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@assemblyscript/loader": "^0.19.23"
+  },
   "devDependencies": {
     "@foxglove/eslint-plugin": "0.19.0",
     "@foxglove/tsconfig": "1.1.0",
@@ -41,6 +46,7 @@
     "@types/jest": "27.4.1",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
+    "assemblyscript": "^0.19.23",
     "benny": "3.7.1",
     "crc": "3.8.0",
     "crc-32": "1.2.1",

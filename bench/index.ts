@@ -7,7 +7,8 @@ import crypto from "crypto";
 import { crc32 as node_crc_crc32 } from "node-crc";
 import { crc32 as polycrc_crc32 } from "polycrc";
 
-import { crc32, crc32GenerateTables, crc32Update } from "../src";
+import { crc32, crc32Final, crc32GenerateTables, crc32Init, crc32Update } from "../src";
+import assemblyscript from "./assemblyscript";
 
 function generateCrc32TableTernary(polynomial: number) {
   const table = new Uint32Array(256);
@@ -226,25 +227,49 @@ async function benchmarkCrcCalculation() {
 async function benchmarkAlternatives() {
   await suite(
     "Alternative libraries",
-    add("crc", async () => {
+    add.skip("crc", async () => {
       const data = crypto.randomBytes(1024 * 1024);
       console.log("crc:", crc_crc32(data), crc32(data));
       return async () => crc_crc32(data);
     }),
-    add("node-crc", async () => {
+    add.skip("node-crc", async () => {
       const data = crypto.randomBytes(1024 * 1024);
       console.log("node-crc:", node_crc_crc32(data).readUInt32BE(0), crc32(data));
       return async () => node_crc_crc32(data).readUInt32BE(0);
     }),
-    add("crc-32", async () => {
+    add.skip("crc-32", async () => {
       const data = crypto.randomBytes(1024 * 1024);
       console.log("crc-32:", crc_32_buf(data) >>> 0, crc32(data));
       return async () => crc_32_buf(data);
     }),
-    add("polycrc", async () => {
+    add.skip("polycrc", async () => {
       const data = crypto.randomBytes(1024 * 1024);
       console.log("polycrc:", polycrc_crc32(data), crc32(data));
       return async () => polycrc_crc32(data);
+    }),
+    add("assemblyscript", async () => {
+      const data = crypto.randomBytes(1024 * 1024);
+      // return async () => asscript.crc32(data);
+
+      const wasmarr = assemblyscript.__pin(assemblyscript.createUint8Array(5 * 1024 * 1024));
+      const wasmview = assemblyscript.__getUint8ArrayView(wasmarr);
+      try {
+        // console.log();
+        // console.log(asscript.crc32(wasmarr) >>> 0);
+        // console.log(crc32(arr));
+      } finally {
+        // asscript.__unpin(wasmarr);
+      }
+      return async () => {
+        let val = crc32Init();
+        for (let offset = 0; offset < data.length; offset += wasmview.length) {
+          const len = Math.min(wasmview.length, data.length - offset);
+          wasmview.set(new Uint8Array(data.buffer, data.byteOffset + offset, len));
+          val = assemblyscript.crc32Update(val, wasmarr, len);
+        }
+
+        return crc32Final(val);
+      };
     }),
     add("this package", async () => {
       const data = crypto.randomBytes(1024 * 1024);
@@ -256,9 +281,25 @@ async function benchmarkAlternatives() {
 }
 
 async function main() {
-  await benchmarkTableGeneration();
-  await benchmarkCrcCalculation();
+  // await benchmarkTableGeneration();
+  // await benchmarkCrcCalculation();
+  void benchmarkCrcCalculation;
+  void benchmarkTableGeneration;
+  void crc_crc32;
+  void crc_32_buf;
+  void polycrc_crc32;
+  void node_crc_crc32;
+  void crc32;
+  void crc32Update;
+  void crcUpdateNaive;
+  void crcUpdate1byte;
+  void crcUpdate2byte;
+  void crcUpdate4byte;
+  void crcUpdate8byte;
+  void crcUpdate16byte;
+  void assemblyscript;
   await benchmarkAlternatives();
+  void benchmarkAlternatives;
 }
 
 void main();

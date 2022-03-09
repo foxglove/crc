@@ -1,0 +1,6 @@
+overrides:
+  - files: ["*.ts", "*.tsx"]
+    extends:
+      - plugin:@foxglove/typescript
+    parserOptions:
+      project: assembly/tsconfig.json
