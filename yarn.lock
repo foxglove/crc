@@ -3517,10 +3517,10 @@ platform@^1.3.3:
   resolved "https://registry.yarnpkg.com/platform/-/platform-1.3.6.tgz#48b4ce983164b209c2d45a107adb31f473a6e7a7"
   integrity sha512-fnWVljUchTro6RiCFvCXBbNhJc2NijN7oIQxbwsyL0buWJPG85v81ehlHI9fXrJsMNgTofEoWIQeClKpgxFLrg==
 
-polycrc@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/polycrc/-/polycrc-1.1.0.tgz#7ee75bd0b47d377d26d78ee7f5c529dde0c77af0"
-  integrity sha512-rEOTU2hpsys8CwOre1XptjEm1pGA8F2mCLI0Hxb1lc7HweXi0m9K70FX5uiGB63v1kklyZ0UfbWNo7pOXp/BHg==
+polycrc@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/polycrc/-/polycrc-1.1.1.tgz#74404cc6443ca237f902c6df43233cff9ba33ca9"
+  integrity sha512-bfvt5BA/1e3e5RhBmmYVYED3PRddGN0j+lAed5PmnLWrVCkYEsltsfZLuKgtmUz1OEvPBAZlgWfoEpUTN/po6Q==
 
 prelude-ls@^1.2.1:
   version "1.2.1"
