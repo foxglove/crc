@@ -52,7 +52,7 @@
     "eslint-plugin-jest": "26.2.2",
     "eslint-plugin-prettier": "4.0.0",
     "jest": "27.5.1",
-    "node-crc": "2.0.11",
+    "node-crc": "2.0.13",
     "polycrc": "1.1.1",
     "prettier": "2.6.2",
     "rimraf": "3.0.2",
