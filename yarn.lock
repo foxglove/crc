@@ -872,10 +872,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/crc@3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@types/crc/-/crc-3.4.0.tgz#2366beb4399cd734b33e42c7ac809576e617d48a"
-  integrity sha1-I2a+tDmc1zSzPkLHrICVduYX1Io=
+"@types/crc@3.8.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@types/crc/-/crc-3.8.0.tgz#688f9c236655af805ce71a791bd7925c997ccdff"
+  integrity sha512-m7woGxgPGlPSJ/4ae/7xf95QW4pDpEiaxlQgGyt+6JInQeKyEdZJybfjZueA84X9Lk8vckPyUnXdvU0nVs4r9w==
   dependencies:
     "@types/node" "*"
 
