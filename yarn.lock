@@ -548,10 +548,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@foxglove/eslint-plugin@0.21.1":
-  version "0.21.1"
-  resolved "https://registry.yarnpkg.com/@foxglove/eslint-plugin/-/eslint-plugin-0.21.1.tgz#eec7afc34ad57c4b3c48115aac599c8bbf5529d6"
-  integrity sha512-dfVZI4uzuZBxudeodMfbEde7iAbVCBccvM8YTXUv9p36sXAVRzToefnmxuI3NIlnY6tA6OVbr2oga0pQ93ok6w==
+"@foxglove/eslint-plugin@0.21.2":
+  version "0.21.2"
+  resolved "https://registry.yarnpkg.com/@foxglove/eslint-plugin/-/eslint-plugin-0.21.2.tgz#dc2e976da50879491b247b49ac7bc4bef6c47c5e"
+  integrity sha512-qUSMrouyknykZNTN40MFgACDGBKQC+4CiV0eAJ4f8g4pJLxWpyXWbR6Su8DefqE71HPIVfQBU1AdvyfBx3/teg==
   dependencies:
     "@typescript-eslint/utils" "^5"
     tsutils "^3"
