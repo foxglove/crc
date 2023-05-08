@@ -4,7 +4,6 @@ import { add, complete, cycle, suite } from "benny";
 import { crc32 as crc_crc32 } from "crc";
 import { buf as crc_32_buf } from "crc-32";
 import crypto from "crypto";
-import { crc32 as node_crc_crc32 } from "node-crc";
 import { crc32 as polycrc_crc32 } from "polycrc";
 
 import { crc32, crc32GenerateTables, crc32Update } from "../src";
@@ -232,6 +231,11 @@ async function benchmarkAlternatives() {
       return async () => crc_crc32(data);
     }),
     add("node-crc", async () => {
+      // Hack to import ESM-only module: https://github.com/microsoft/TypeScript/issues/43329
+      // eslint-disable-next-line no-eval
+      const { crc32: node_crc_crc32 } = (await eval(
+        "import('node-crc')",
+      )) as typeof import("node-crc");
       const data = crypto.randomBytes(1024 * 1024);
       console.log("node-crc:", node_crc_crc32(data).readUInt32BE(0), crc32(data));
       return async () => node_crc_crc32(data).readUInt32BE(0);
