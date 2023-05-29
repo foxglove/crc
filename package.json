@@ -40,7 +40,7 @@
     "@types/crc": "3.8.0",
     "@types/jest": "29.5.1",
     "@typescript-eslint/eslint-plugin": "5.59.5",
-    "@typescript-eslint/parser": "5.59.5",
+    "@typescript-eslint/parser": "5.59.8",
     "benny": "3.7.1",
     "crc": "4.3.2",
     "crc-32": "1.2.2",
