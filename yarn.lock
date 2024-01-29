@@ -938,10 +938,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@napi-rs/cli@^2.15.2":
-  version "2.15.2"
-  resolved "https://registry.yarnpkg.com/@napi-rs/cli/-/cli-2.15.2.tgz#33547b25fcc1bc0dd52d1c7409694b3f62c01c16"
-  integrity sha512-80tBCtCnEhAmFtB9oPM0FL74uW7fAmtpeqjvERH7Q1z/aZzCAs/iNfE7U3ehpwg9Q07Ob2Eh/+1guyCdX/p24w==
+"@napi-rs/cli@^2.16.3":
+  version "2.18.0"
+  resolved "https://registry.yarnpkg.com/@napi-rs/cli/-/cli-2.18.0.tgz#3064f142e65c87d14e6ddc38e5425aa29a8871eb"
+  integrity sha512-lfSRT7cs3iC4L+kv9suGYQEezn5Nii7Kpu+THsYVI0tA1Vh59LH45p4QADaD7hvIkmOz79eEGtoKQ9nAkAPkzA==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1092,10 +1092,12 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
-"@types/node@*", "@types/node@^18.16.1":
-  version "18.16.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.3.tgz#6bda7819aae6ea0b386ebc5b24bdf602f1b42b01"
-  integrity sha512-OPs5WnnT1xkCBiuQrZA4+YAV4HEJejmHneyraIaxsbev5yCEr6KMwINNFP9wQeFIw8FWcoTqF3vQsa5CDaI+8Q==
+"@types/node@*", "@types/node@^20.8.2":
+  version "20.11.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.10.tgz#6c3de8974d65c362f82ee29db6b5adf4205462f9"
+  integrity sha512-rZEfe/hJSGYmdfX9tvcPMYeYPW2sNl50nsw4jZmRcaG0HIAb0WYEpsB05GOb53vjqpyE9GUhlDQ4jLSoB5q9kg==
+  dependencies:
+    undici-types "~5.26.4"
 
 "@types/semver@^7.3.12":
   version "7.5.0"
@@ -3424,13 +3426,13 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-node-crc@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/node-crc/-/node-crc-3.0.1.tgz#500a3157964acd3dce761d6b327c35005e57081c"
-  integrity sha512-/bVqTs5A20/ubHhp2dqD4cwFNFGN8pm9+vNyGR9WqEiDuzHeU4QbKm8HxzcLvn2AI8SNfhfAieJN2hzJxtGIRw==
+node-crc@3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/node-crc/-/node-crc-3.0.2.tgz#9f710fefa7a0e455e2ef62868f4d5d9ffc4c3e87"
+  integrity sha512-Z0VwDxKPbmOoAXQCf2c8lW8OkwG8Mwtaq2nFOCUvj8Bqsmg5wbY6BTA0fIhQQRFma2sHNnJGYr+6INcXHWOEUw==
   dependencies:
-    "@napi-rs/cli" "^2.15.2"
-    "@types/node" "^18.16.1"
+    "@napi-rs/cli" "^2.16.3"
+    "@types/node" "^20.8.2"
 
 node-int64@^0.4.0:
   version "0.4.0"
@@ -4166,6 +4168,11 @@ unbox-primitive@^1.0.2:
     has-bigints "^1.0.2"
     has-symbols "^1.0.3"
     which-boxed-primitive "^1.0.2"
+
+undici-types@~5.26.4:
+  version "5.26.5"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
+  integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
 
 universalify@^2.0.0:
   version "2.0.0"
