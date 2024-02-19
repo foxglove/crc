@@ -1041,10 +1041,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/crc@3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@types/crc/-/crc-3.8.0.tgz#688f9c236655af805ce71a791bd7925c997ccdff"
-  integrity sha512-m7woGxgPGlPSJ/4ae/7xf95QW4pDpEiaxlQgGyt+6JInQeKyEdZJybfjZueA84X9Lk8vckPyUnXdvU0nVs4r9w==
+"@types/crc@3.8.3":
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/@types/crc/-/crc-3.8.3.tgz#9ff810cced88051a82a09cfcec65b3d48bdbd761"
+  integrity sha512-XR7+BLIOgpI8vEmABN30VEjxOq/AT+e03elBJjXgQEKW4/BAOTnjD93vdP6fAmisQ569/wuJNguvgBcg1fclbA==
   dependencies:
     "@types/node" "*"
 
