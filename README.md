@@ -2,7 +2,7 @@
 
 Fast CRC32 computation in TypeScript
 
-[![npm version](https://img.shields.io/npm/v/@foxglove/crc)](https://www.npmjs.com/package/@foxglove/crc)
+[![npm version](https://img.shields.io/npm/v/@foxglove/crc)](https://www.npmjs.com/package/@foxglove/crc) ![](https://img.shields.io/badge/dependencies-0-green)
 
 ## Introduction
 
@@ -48,25 +48,25 @@ crc = crc32Final(crc);
 
 This package achieves a >5x performance improvement over many other CRC packages, because of the multi-byte algorithms used (adapted from https://github.com/komrad36/CRC).
 
-The following benchmarks were recorded on a M1 MacBook Air with 16GB of RAM. Each iteration ("op") is processing 1MB of data.
+The following benchmarks were recorded on a MacBook Pro with an M1 Pro chip and 16GB of RAM. Each iteration ("op") is processing 1MB of data.
 
 ```
 $ yarn bench
 ...
   crc:
-    354.5 ops/s, ±0.48%   | 82.27% slower
+    355 ops/s, ±0.56%     | 81.52% slower
 
   node-crc:
-    315.8 ops/s, ±0.48%   | slowest, 84.21% slower
+    376 ops/s, ±0.14%     | 80.43% slower
 
   crc-32:
-    354.3 ops/s, ±0.39%   | 82.28% slower
+    1 057 ops/s, ±0.16%   | 44.98% slower
 
   polycrc:
-    316.1 ops/s, ±0.35%   | 84.19% slower
+    327 ops/s, ±0.21%     | slowest, 82.98% slower
 
   this package:
-    2 000 ops/s, ±0.41%   | fastest
+    1 921 ops/s, ±0.18%   | fastest
 ```
 
 ## References
