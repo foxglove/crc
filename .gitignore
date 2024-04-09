@@ -1,5 +1,6 @@
 .DS_Store
 *.log
+*.tgz
 *.tsbuildinfo
 dist/
 node_modules/
