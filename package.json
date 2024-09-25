@@ -55,7 +55,7 @@
     "node-crc": "3.0.2",
     "polycrc": "1.1.1",
     "prettier": "2.8.8",
-    "rimraf": "5.0.5",
+    "rimraf": "6.0.1",
     "ts-jest": "29.2.4",
     "ts-node": "10.9.2",
     "typescript": "5.5.4"
