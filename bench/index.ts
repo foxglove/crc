@@ -35,6 +35,7 @@ function generateCrc32TableBranchless(polynomial: number) {
 
 function crcUpdateNaive(prev: number, polynomial: number, data: Uint8Array): number {
   let r = prev;
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < data.length; i++) {
     r ^= data[i]!;
     r = ((r & 1) * polynomial) ^ (r >>> 1);
