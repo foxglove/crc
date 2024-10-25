@@ -32,9 +32,5 @@ module.exports = [
   ...foxglove.configs.typescript.map((config) => ({
     ...config,
     files: ["**/*.@(ts|tsx)"],
-    rules: {
-      ...config.rules,
-      "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
-    },
   })),
 ];
