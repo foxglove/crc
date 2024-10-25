@@ -2,6 +2,8 @@
   "extends": "@foxglove/tsconfig/base",
   "include": ["./src/**/*", "./bench/**/*"],
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
     "rootDir": ".",
     "outDir": "./dist/esm",
     "lib": ["dom"]

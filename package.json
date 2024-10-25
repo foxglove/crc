@@ -33,9 +33,8 @@
     "bench": "ts-node --project tsconfig.cjs.json bench/index.ts",
     "test": "jest"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@foxglove/eslint-plugin": "github:foxglove/eslint-plugin#d5d46c14c5a80ae4079534a7a7228ae10aecb6af",
+    "@foxglove/eslint-plugin": "github:foxglove/eslint-plugin#aedd5ce0400c4d4997b9d313cce7abea0041c099",
     "@foxglove/tsconfig": "2.0.0",
     "@types/crc": "3.8.3",
     "@types/jest": "29.5.12",
@@ -52,6 +51,7 @@
     "rimraf": "6.0.1",
     "ts-jest": "29.2.5",
     "ts-node": "10.9.2",
-    "typescript": "5.6.3"
+    "typescript": "5.6.3",
+    "typescript-eslint": "8.10.0"
   }
 }

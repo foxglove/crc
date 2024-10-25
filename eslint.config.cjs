@@ -1,8 +1,10 @@
+// @ts-check
+
 const foxglove = require("@foxglove/eslint-plugin");
 const globals = require("globals");
+const tseslint = require("typescript-eslint");
 
-/** @type {import("eslint").Linter.Config[]} */
-module.exports = [
+module.exports = tseslint.config(
   {
     ignores: ["**/dist/"],
   },
@@ -33,4 +35,4 @@ module.exports = [
     ...config,
     files: ["**/*.@(ts|tsx)"],
   })),
-];
+);
