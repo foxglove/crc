@@ -34,7 +34,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@foxglove/eslint-plugin": "github:foxglove/eslint-plugin#aedd5ce0400c4d4997b9d313cce7abea0041c099",
+    "@foxglove/eslint-plugin": "2.0.0",
     "@foxglove/tsconfig": "2.0.0",
     "@types/crc": "3.8.3",
     "@types/jest": "29.5.12",

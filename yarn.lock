@@ -648,9 +648,10 @@
   dependencies:
     levn "^0.4.1"
 
-"@foxglove/eslint-plugin@github:foxglove/eslint-plugin#aedd5ce0400c4d4997b9d313cce7abea0041c099":
-  version "2.0.0-beta.2"
-  resolved "https://codeload.github.com/foxglove/eslint-plugin/tar.gz/aedd5ce0400c4d4997b9d313cce7abea0041c099"
+"@foxglove/eslint-plugin@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@foxglove/eslint-plugin/-/eslint-plugin-2.0.0.tgz#81198ec5ffecc2bcbb6fde74285484cb7d0cb2fb"
+  integrity sha512-0HLMt84d1pE3Z5BfK3ExXCQyoo2lw4teCbYaUx10UuU6RYO3NSm9JJ09+LqPO93qyXdp80PQn5JMEKMT/iYVKQ==
   dependencies:
     "@eslint/compat" "^1"
     "@eslint/js" "^9"
