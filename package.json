@@ -47,7 +47,7 @@
     "jest": "29.7.0",
     "node-crc": "3.0.2",
     "polycrc": "1.1.1",
-    "prettier": "3.3.3",
+    "prettier": "3.4.2",
     "rimraf": "6.0.1",
     "ts-jest": "29.2.5",
     "ts-node": "10.9.2",
