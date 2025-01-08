@@ -1098,12 +1098,12 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/crc@3.8.3":
-  version "3.8.3"
-  resolved "https://registry.yarnpkg.com/@types/crc/-/crc-3.8.3.tgz#9ff810cced88051a82a09cfcec65b3d48bdbd761"
-  integrity sha512-XR7+BLIOgpI8vEmABN30VEjxOq/AT+e03elBJjXgQEKW4/BAOTnjD93vdP6fAmisQ569/wuJNguvgBcg1fclbA==
+"@types/crc@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/crc/-/crc-4.0.0.tgz#9ac1966e5cc0e23b73aa576e9d75a4a90a39549f"
+  integrity sha512-R8H9yJnMKiUIJNsWI8h2l+hxq3XBZ7C6zycLwto5g10J5lKVny8KBbanOZeuZ1HyhI+F7TrSi7N+cr2v9/IuRA==
   dependencies:
-    "@types/node" "*"
+    crc "*"
 
 "@types/estree@^1.0.6":
   version "1.0.6"
@@ -1768,7 +1768,7 @@ crc-32@1.2.2:
   resolved "https://registry.yarnpkg.com/crc-32/-/crc-32-1.2.2.tgz#3cad35a934b8bf71f25ca524b6da51fb7eace2ff"
   integrity sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==
 
-crc@4.3.2:
+crc@*, crc@4.3.2:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/crc/-/crc-4.3.2.tgz#49b7821cbf2cf61dfd079ed93863bbebd5469b9a"
   integrity sha512-uGDHf4KLLh2zsHa8D8hIQ1H/HtFQhyHrc0uhHBcoKGol/Xnb+MPYfUMw7cvON6ze/GUESTudKayDcJC5HnJv1A==
