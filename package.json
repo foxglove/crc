@@ -38,7 +38,7 @@
     "@foxglove/tsconfig": "2.0.0",
     "@types/crc": "3.8.3",
     "@types/jest": "29.5.14",
-    "@types/node": "22.10.3",
+    "@types/node": "22.13.8",
     "benny": "3.7.1",
     "crc": "4.3.2",
     "crc-32": "1.2.2",
