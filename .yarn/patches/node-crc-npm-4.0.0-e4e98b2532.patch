@@ -1,0 +1,13 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index a967508960d8b6b686b23401ea14333b858a675c..1a210f1d7481d29b4ab62e4448cd9a2f81bf75bc 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -3,7 +3,7 @@ name = "node-crc"
+ version = "4.0.0"
+ authors = ["Magic Len <len@magiclen.org>"]
+ edition = "2021"
+-rust-version = "1.65"
++rust-version = "1.77"
+ repository = "https://github.com/magiclen/node-crc"
+ homepage = "https://magiclen.org/node-js-crc/"
+ keywords = ["nodejs", "crc8", "crc16", "crc32", "crc64"]
