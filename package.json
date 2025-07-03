@@ -35,7 +35,6 @@
   "devDependencies": {
     "@foxglove/eslint-plugin": "2.0.0",
     "@foxglove/tsconfig": "2.0.0",
-    "@types/crc": "3.8.3",
     "@types/jest": "29.5.14",
     "@types/node": "22.13.17",
     "benny": "3.7.1",
