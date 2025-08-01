@@ -40,7 +40,7 @@
     "benny": "3.7.1",
     "crc": "4.3.2",
     "crc-32": "1.2.2",
-    "eslint": "9.23.0",
+    "eslint": "9.32.0",
     "globals": "15.14.0",
     "jest": "29.7.0",
     "node-crc": "patch:node-crc@npm%3A4.0.0#~/.yarn/patches/node-crc-npm-4.0.0-e4e98b2532.patch",
