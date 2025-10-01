@@ -42,7 +42,7 @@
     "crc-32": "1.2.2",
     "eslint": "9.32.0",
     "globals": "16.3.0",
-    "jest": "30.0.5",
+    "jest": "30.2.0",
     "node-crc": "patch:node-crc@npm%3A4.0.0#~/.yarn/patches/node-crc-npm-4.0.0-e4e98b2532.patch",
     "polycrc": "1.1.1",
     "prettier": "3.6.2",
