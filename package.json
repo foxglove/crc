@@ -46,7 +46,7 @@
     "node-crc": "patch:node-crc@npm%3A4.0.0#~/.yarn/patches/node-crc-npm-4.0.0-e4e98b2532.patch",
     "polycrc": "1.1.1",
     "prettier": "3.6.2",
-    "rimraf": "6.0.1",
+    "rimraf": "6.1.0",
     "ts-jest": "29.4.1",
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
