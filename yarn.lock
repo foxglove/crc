@@ -828,7 +828,7 @@ __metadata:
     crc: "npm:4.3.2"
     crc-32: "npm:1.2.2"
     eslint: "npm:9.39.1"
-    globals: "npm:16.3.0"
+    globals: "npm:16.5.0"
     jest: "npm:30.2.0"
     node-crc: "patch:node-crc@npm%3A4.0.0#~/.yarn/patches/node-crc-npm-4.0.0-e4e98b2532.patch"
     polycrc: "npm:1.1.1"
@@ -3870,10 +3870,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:16.3.0":
-  version: 16.3.0
-  resolution: "globals@npm:16.3.0"
-  checksum: 10c0/c62dc20357d1c0bf2be4545d6c4141265d1a229bf1c3294955efb5b5ef611145391895e3f2729f8603809e81b30b516c33e6c2597573844449978606aad6eb38
+"globals@npm:16.5.0":
+  version: 16.5.0
+  resolution: "globals@npm:16.5.0"
+  checksum: 10c0/615241dae7851c8012f5aa0223005b1ed6607713d6813de0741768bd4ddc39353117648f1a7086b4b0fa45eae733f1c0a0fe369aa4e543bb63f8de8990178ea9
   languageName: node
   linkType: hard
 
