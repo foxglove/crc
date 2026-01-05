@@ -36,7 +36,7 @@
     "@foxglove/eslint-plugin": "2.1.0",
     "@foxglove/tsconfig": "2.0.0",
     "@types/jest": "30.0.0",
-    "@types/node": "24.10.1",
+    "@types/node": "25.0.3",
     "benny": "3.7.1",
     "crc": "4.3.2",
     "crc-32": "1.2.2",
