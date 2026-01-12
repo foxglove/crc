@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
+      contents: read
       # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
       id-token: write
 
@@ -33,14 +34,6 @@ jobs:
       - run: yarn run test
 
       - run: yarn pack
-      - name: Publish to NPM (dry run)
-        # `yarn publish` does not support --provenance
-        run: npm publish package.tgz --provenance --access public --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
       - name: Publish to NPM
         if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-        # `yarn publish` does not support --provenance
-        run: npm publish package.tgz --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: npx npm@latest publish package.tgz --provenance --access public

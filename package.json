@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/foxglove/crc.git"
+    "url": "git+https://github.com/foxglove/crc.git"
   },
   "author": {
     "name": "Foxglove",
