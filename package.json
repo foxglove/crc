@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/foxglove/crc.git"
+    "url": "git+https://github.com/foxglove/crc.git"
   },
   "author": {
     "name": "Foxglove",
@@ -52,5 +52,5 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.52.0"
   },
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "yarn@4.12.0"
 }
